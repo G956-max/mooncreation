@@ -71,7 +71,7 @@ export default function Home() {
       <OfferSlider />
       
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden group !mt-0 !pt-0 !mb-0 !pb-0 bg-gray-900 min-h-[500px] md:min-h-[600px] flex items-center">
+      <section className="relative w-full overflow-hidden group !mt-0 !pt-0 !mb-0 !pb-0 bg-gray-900 min-h-[450px] md:min-h-[600px] flex items-center">
         {/* Full Banner Images */}
         <div className="absolute inset-0 w-full h-full">
           {slides.map((slide, index) => (
@@ -88,30 +88,30 @@ export default function Home() {
                 referrerPolicy="no-referrer"
               />
               {/* Overlay for better text readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent z-11" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-11 md:from-black/60 md:via-black/30" />
             </div>
           ))}
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-20 w-full mx-auto px-4 sm:px-8 lg:px-12 py-12 md:py-0">
+        <div className="relative z-20 w-full mx-auto px-4 sm:px-8 lg:px-12 py-20 md:py-0">
           <div className="max-w-3xl space-y-6 md:space-y-8 text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-serif text-white font-bold leading-tight drop-shadow-lg">
+            <h1 className="text-3xl md:text-6xl font-serif text-white font-bold leading-tight drop-shadow-xl">
               {slides[currentSlide]?.title}
             </h1>
-            <p className="text-lg md:text-xl text-white/90 max-w-md mx-auto md:mx-0 drop-shadow-md">
+            <p className="text-base md:text-xl text-white/90 max-w-sm md:max-w-md mx-auto md:mx-0 drop-shadow-lg line-clamp-2 md:line-clamp-none">
               {slides[currentSlide]?.subtitle}
             </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-3 sm:gap-4 px-8 sm:px-0">
               <button 
                 onClick={() => requireAuth(() => navigate('/categories'))}
-                className="bg-[#C48B22] text-white px-10 py-4 rounded-lg font-bold text-sm hover:bg-[#A6751C] hover:scale-105 transition-all shadow-xl uppercase tracking-wider"
+                className="bg-[#C48B22] text-white px-6 sm:px-10 py-3.5 sm:py-4 rounded-lg font-bold text-xs sm:text-sm hover:bg-[#A6751C] hover:scale-105 transition-all shadow-2xl uppercase tracking-wider"
               >
                 {t('shopNow')}
               </button>
               <button 
                 onClick={() => requireAuth(() => navigate('/categories'))}
-                className="bg-white/10 backdrop-blur-md text-white border-2 border-white/30 px-10 py-4 rounded-lg font-bold text-sm hover:bg-white hover:text-[#2C2C2C] hover:scale-105 transition-all shadow-xl uppercase tracking-wider flex items-center gap-2"
+                className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-6 sm:px-10 py-3.5 sm:py-4 rounded-lg font-bold text-xs sm:text-sm hover:bg-white hover:text-[#2C2C2C] hover:scale-105 transition-all shadow-2xl uppercase tracking-wider flex items-center justify-center gap-2"
               >
                 {t('customizeGift')} 🎁
               </button>
@@ -124,26 +124,26 @@ export default function Home() {
           <>
             <button 
               onClick={prevSlide}
-              className="absolute left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#2C2C2C] backdrop-blur-sm shadow-xl transition-all opacity-0 group-hover:opacity-100"
+              className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#2C2C2C] backdrop-blur-sm shadow-xl transition-all opacity-0 group-hover:opacity-100"
               aria-label="Previous slide"
             >
               <ChevronLeft size={24} />
             </button>
             <button 
               onClick={nextSlide}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#2C2C2C] backdrop-blur-sm shadow-xl transition-all opacity-0 group-hover:opacity-100"
+              className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#2C2C2C] backdrop-blur-sm shadow-xl transition-all opacity-0 group-hover:opacity-100"
               aria-label="Next slide"
             >
               <ChevronRight size={24} />
             </button>
 
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+            <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2 md:gap-3">
               {slides.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentSlide ? 'bg-[#C48B22] w-10' : 'bg-white/40 hover:bg-white/60'
+                  className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all ${
+                    index === currentSlide ? 'bg-[#C48B22] w-6 md:w-10' : 'bg-white/40 hover:bg-white/60'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
