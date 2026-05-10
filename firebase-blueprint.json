@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "Offer": {
+      "title": "Offer",
+      "description": "A promotional offer displayed on the home page slider.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the offer." },
+        "description": { "type": "string", "description": "Details about the offer." },
+        "imageUrl": { "type": "string", "description": "The banner image URL." },
+        "createdAt": { "type": "timestamp", "description": "When the offer was created." }
+      },
+      "required": ["title", "description", "imageUrl", "createdAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "A product category.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "The name of the category." },
+        "imageUrl": { "type": "string", "description": "The image URL for the category." },
+        "subText": { "type": "string", "description": "Optional subtext for the category." },
+        "createdAt": { "type": "timestamp", "description": "When the category was created." }
+      },
+      "required": ["name", "imageUrl", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "An artisanal product with full commerce details.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "The name of the product." },
+        "description": { "type": "string", "description": "Detailed product description." },
+        "price": { "type": "number", "description": "The selling price." },
+        "comparePrice": { "type": "number", "description": "The original price for comparison." },
+        "costPerItem": { "type": "number", "description": "Cost to produce/buy the item." },
+        "sku": { "type": "string", "description": "Stock Keeping Unit." },
+        "barcode": { "type": "string", "description": "Barcode or GTIN." },
+        "trackQuantity": { "type": "boolean", "description": "Whether to track inventory." },
+        "availableQuantity": { "type": "number", "description": "Current stock level." },
+        "status": { "type": "string", "enum": ["draft", "published"], "description": "Product status." },
+        "category": { "type": "string", "description": "Product category." },
+        "productType": { "type": "string", "description": "Type of product." },
+        "vendor": { "type": "string", "description": "Product vendor." },
+        "collections": { "type": "array", "items": { "type": "string" }, "description": "Collections this product belongs to." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Search tags." },
+        "imageUrl": { "type": "string", "description": "The product image URL." },
+        "createdAt": { "type": "timestamp", "description": "When the product was created." }
+      },
+      "required": ["name", "price", "category", "imageUrl", "status", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A user review for a product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "description": "The ID of the product being reviewed." },
+        "userId": { "type": "string", "description": "The ID of the user who wrote the review." },
+        "userName": { "type": "string", "description": "The name of the user." },
+        "rating": { "type": "number", "description": "The rating given (1-5)." },
+        "comment": { "type": "string", "description": "The review text." },
+        "createdAt": { "type": "timestamp", "description": "When the review was created." }
+      },
+      "required": ["productId", "userId", "userName", "rating", "comment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/offers/{offerId}": {
+      "schema": { "$ref": "#/entities/Offer" },
+      "description": "Stores promotional offers."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Stores product categories."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Stores products."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Stores product reviews."
+    }
+  }
+}
