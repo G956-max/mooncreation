@@ -13,24 +13,25 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useLanguage } from '../context/LanguageContext';
 
-const heroSlides = [
-  {
-    image: "https://images.unsplash.com/photo-1549465220-1d8c9d9c4701?auto=format&fit=crop&q=80&w=2000",
-    title: "Create Memories That Last Forever",
-    subtitle: "Personalized gifts that speak from the heart and stay in memories forever."
-  },
-  {
-    image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&q=80&w=2000",
-    title: "Unique Birthday Surprises",
-    subtitle: "Make their special day unforgettable with our curated gift collections."
-  }
-];
-
 export default function Home() {
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const heroSlides = [
+    {
+      image: "https://images.unsplash.com/photo-1549465220-1d8c9d9c4701?auto=format&fit=crop&q=80&w=2000",
+      title: "Create Memories That Last Forever",
+      subtitle: "Personalized gifts that speak from the heart and stay in memories forever."
+    },
+    {
+      image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&q=80&w=2000",
+      title: "Unique Birthday Surprises",
+      subtitle: "Make their special day unforgettable with our curated gift collections."
+    }
+  ];
+
   const [slides, setSlides] = useState(heroSlides);
 
   useEffect(() => {
@@ -92,13 +93,13 @@ export default function Home() {
                       onClick={() => requireAuth(() => navigate('/categories'))}
                       className="bg-[#C48B22] text-white px-8 py-4 rounded-lg font-bold text-sm hover:bg-[#A6751C] hover:scale-105 transition-all shadow-lg uppercase tracking-wider"
                     >
-                      Shop Now
+                      {t('shopNow')}
                     </button>
                     <button 
                       onClick={() => requireAuth(() => navigate('/categories'))}
                       className="bg-white text-[#2C2C2C] border-2 border-gray-100 px-8 py-4 rounded-lg font-bold text-sm hover:border-[#C48B22] hover:text-[#C48B22] hover:scale-105 transition-all shadow-sm uppercase tracking-wider flex items-center gap-2"
                     >
-                      Customize Gift 🎁
+                      {t('customizeGift')} 🎁
                     </button>
                   </div>
                 </div>
@@ -157,13 +158,13 @@ export default function Home() {
       <SpecialOffers />
 
       {/* Shop By Category */}
-      <CategoryGrid title="Shop By Category" />
+      <CategoryGrid title={t('shopByCategory')} />
       
       {/* Trending Gifts */}
-      <ProductGrid title="Trending Gifts" count={6} />
+      <ProductGrid title={t('trendingGifts')} count={6} />
 
       {/* New Arrivals */}
-      <ProductGrid title="New Arrivals" count={6} />
+      <ProductGrid title={t('newArrivals')} count={6} />
 
       {/* Why Choose Us */}
       <WhyChooseUs />

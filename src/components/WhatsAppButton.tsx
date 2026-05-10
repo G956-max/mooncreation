@@ -1,7 +1,9 @@
 import { MessageCircle } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function WhatsAppButton() {
-  const phoneNumber = "7845890485"; // From previous context
+  const { t } = useLanguage();
+  const phoneNumber = "7845890485";
   const message = encodeURIComponent("Hello MOONCREATION, I have a question about your products.");
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
@@ -15,7 +17,7 @@ export default function WhatsAppButton() {
     >
       <MessageCircle size={32} fill="currentColor" className="text-white" />
       <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white text-[#2C2C2C] px-4 py-2 rounded-lg text-sm font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-gray-100">
-        Chat with us!
+        {t('chatWithUs')}
       </span>
     </a>
   );

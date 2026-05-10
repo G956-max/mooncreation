@@ -58,7 +58,7 @@ export default function CategoryGrid({ title }: CategoryGridProps) {
           onClick={() => navigate('/categories')}
           className="text-xs font-bold text-[#C48B22] uppercase tracking-widest hover:text-[#A6751C] transition-colors"
         >
-          View All
+          {t('viewAll')}
         </button>
       </div>
       
@@ -92,7 +92,7 @@ export default function CategoryGrid({ title }: CategoryGridProps) {
             <MoreHorizontal size={32} className="text-gray-300 group-hover:text-[#C48B22] transition-colors" />
           </div>
           <h3 className="text-[11px] md:text-xs font-bold text-[#2C2C2C] text-center uppercase tracking-tight leading-tight group-hover:text-[#C48B22] transition-colors">
-            More
+            {t('more')}
           </h3>
         </div>
       </div>

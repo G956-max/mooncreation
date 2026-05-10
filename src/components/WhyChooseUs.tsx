@@ -1,19 +1,22 @@
 import { Users, Gift, Star, ShieldCheck, RotateCcw, MapPin } from 'lucide-react';
-
-const stats = [
-  { icon: <Users size={24} />, value: '10K+', label: 'Happy Customers' },
-  { icon: <Gift size={24} />, value: '50K+', label: 'Gifts Delivered' },
-  { icon: <Star size={24} />, value: '4.9', label: 'Average Rating' },
-  { icon: <ShieldCheck size={24} />, value: '100%', label: 'Secure Payments' },
-  { icon: <RotateCcw size={24} />, value: '7 Days', label: 'Easy Returns' },
-  { icon: <MapPin size={24} />, value: 'Made in India', label: 'Proudly Indian Brand' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function WhyChooseUs() {
+  const { t } = useLanguage();
+
+  const stats = [
+    { icon: <Users size={24} />, value: '10K+', label: t('happyCustomers') },
+    { icon: <Gift size={24} />, value: '50K+', label: t('giftsDelivered') },
+    { icon: <Star size={24} />, value: '4.9', label: t('averageRating') },
+    { icon: <ShieldCheck size={24} />, value: '100%', label: t('securePayments') },
+    { icon: <RotateCcw size={24} />, value: '7 Days', label: t('easyReturns') },
+    { icon: <MapPin size={24} />, value: t('madeInIndia'), label: t('proudlyIndian') },
+  ];
+
   return (
     <section className="bg-white py-20 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-16">Why Choose MOONCREATION?</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-16">{t('whyChooseUs')}</h2>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {stats.map((stat, index) => (

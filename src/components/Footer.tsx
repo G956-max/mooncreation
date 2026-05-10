@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Instagram, Twitter, Facebook, Youtube, Send, ShieldCheck, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Youtube, Send, ShieldCheck } from 'lucide-react';
 import { useRequireAuth } from '../hooks/useRequireAuth';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer() {
   const requireAuth = useRequireAuth();
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
 
   const handleLinkClick = (e: React.MouseEvent) => {
@@ -41,12 +43,12 @@ export default function Footer() {
           
           {/* Newsletter Column */}
           <div className="space-y-6">
-            <h4 className="font-bold text-lg">Subscribe to our newsletter</h4>
-            <p className="text-gray-500 text-sm">Get latest updates and exclusive offers</p>
+            <h4 className="font-bold text-lg uppercase tracking-wider">{t('newsletterTitle')}</h4>
+            <p className="text-gray-500 text-sm">{t('newsletterSub')}</p>
             <form onSubmit={handleNewsletterSubmit} className="relative group">
               <input 
                 type="email" 
-                placeholder="Enter your email address"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -61,9 +63,9 @@ export default function Footer() {
           {/* Quick Links Column */}
           <div className="grid grid-cols-2 gap-8 lg:col-span-2">
             <div>
-              <h4 className="font-bold text-lg mb-6">SHOP</h4>
+              <h4 className="font-bold text-lg mb-6 uppercase tracking-wider">{t('shop')}</h4>
               <ul className="space-y-4 text-gray-500 text-sm font-medium">
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">All Products</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('allProducts')}</a></li>
                 <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Personalized Gifts</a></li>
                 <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Gifts by Person</a></li>
                 <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Combo Gifts</a></li>
@@ -71,13 +73,13 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-lg mb-6">HELP & SUPPORT</h4>
+              <h4 className="font-bold text-lg mb-6 uppercase tracking-wider">{t('helpSupport')}</h4>
               <ul className="space-y-4 text-gray-500 text-sm font-medium">
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Contact Us</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">FAQs</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Shipping Policy</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Return & Refund</a></li>
-                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">Track Order</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('contact')}</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('faqs')}</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('shippingPolicy')}</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('returnRefund')}</a></li>
+                <li><a href="#" onClick={handleLinkClick} className="hover:text-[#C48B22] transition-colors">{t('trackOrder')}</a></li>
               </ul>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon, Languages, Check, ChevronDown } from 'lucide-react';
+import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon, Languages, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -41,8 +41,8 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'All Categories', path: '/categories' },
+    { name: t('home'), path: '/' },
+    { name: t('allProducts'), path: '/categories' },
     { name: 'Occasion', path: '#', hasDropdown: true },
     { name: 'Personalized Gifts', path: '#', hasDropdown: true },
     { name: 'Gifts by Person', path: '#', hasDropdown: true },
@@ -69,7 +69,7 @@ export default function Navbar() {
               <form onSubmit={handleSearch} className="relative w-full group">
                 <input 
                   type="text" 
-                  placeholder="Search for gifts, occasions, products..."
+                  placeholder={t('searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="block w-full pl-6 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium placeholder-gray-400 focus:bg-white focus:border-[#C48B22] focus:ring-4 focus:ring-[#C48B22]/5 outline-none transition-all"
@@ -101,7 +101,7 @@ export default function Navbar() {
                 className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
               >
                 <Heart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
-                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Wishlist</span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('wishlist')}</span>
                 {wishlistItems.length > 0 && (
                   <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {wishlistItems.length}
@@ -114,7 +114,7 @@ export default function Navbar() {
                 className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
               >
                 <ShoppingCart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
-                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Cart</span>
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('cart')}</span>
                 {cartItems.length > 0 && (
                   <span className="absolute top-1 right-2 w-4 h-4 bg-[#C48B22] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {cartItems.length}
@@ -128,7 +128,7 @@ export default function Navbar() {
                   className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
                 >
                   <User size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
-                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Login</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('login')}</span>
                 </button>
               ) : (
                 <button 
@@ -138,7 +138,7 @@ export default function Navbar() {
                   <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
                     <User size={16} className="text-gray-600" />
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Account</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('myAccount')}</span>
                 </button>
               )}
 
@@ -198,7 +198,7 @@ export default function Navbar() {
               <form onSubmit={handleSearch} className="relative">
                 <input 
                   type="text" 
-                  placeholder="Search for gifts..."
+                  placeholder={t('searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-6 pr-14 py-4 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium outline-none"
@@ -235,21 +235,21 @@ export default function Navbar() {
                   className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
                 >
                   <Heart size={24} className="text-[#C48B22]" />
-                  <span className="text-xs font-bold">Wishlist</span>
+                  <span className="text-xs font-bold">{t('wishlist')}</span>
                 </button>
                 <button 
                   onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }}
                   className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
                 >
                   <ShoppingCart size={24} className="text-[#C48B22]" />
-                  <span className="text-xs font-bold">Cart</span>
+                  <span className="text-xs font-bold">{t('cart')}</span>
                 </button>
                 <button 
                   onClick={() => { handleProfileClick(); setIsMobileMenuOpen(false); }}
                   className="flex flex-col items-center justify-center p-4 bg-[#2C2C2C] text-white rounded-xl gap-2"
                 >
                   <User size={24} />
-                  <span className="text-xs font-bold">{isLoggedIn ? 'Account' : 'Login'}</span>
+                  <span className="text-xs font-bold">{isLoggedIn ? t('myAccount') : t('login')}</span>
                 </button>
               </div>
             </motion.div>
@@ -261,9 +261,9 @@ export default function Navbar() {
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleLogoutConfirm}
-        title="Logout"
+        title={t('logout')}
         message="Are you sure you want to logout?"
-        confirmText="Logout"
+        confirmText={t('logout')}
       />
     </>
   );
