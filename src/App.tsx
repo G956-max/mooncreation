@@ -54,11 +54,14 @@ const ProtectedUserRoute = ({ children }: { children: React.ReactNode }) => {
   return <PublicLayout>{children}</PublicLayout>;
 };
 
+import BottomNav from './components/BottomNav';
+
 const PublicLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="h-auto flex flex-col font-sans bg-[#FAF9F6] text-[#2C2C2C] m-0 p-0">
+  <div className="h-auto flex flex-col font-sans bg-[#FAF9F6] text-[#2C2C2C] m-0 p-0 pb-16 md:pb-0">
     <Navbar />
     <main className="flex-grow">{children}</main>
     <Footer />
+    <BottomNav />
   </div>
 );
 

@@ -53,19 +53,19 @@ export default function Navbar() {
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
-        {/* Top Row: Logo, Search, Actions */}
-        <div className="w-full px-4 sm:px-8 lg:px-12 border-b border-gray-50">
+        {/* Desktop Header */}
+        <div className="hidden md:block w-full px-4 sm:px-8 lg:px-12 border-b border-gray-50">
           <div className="flex justify-between items-center h-20 gap-4">
             {/* Left: Logo */}
             <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigate('/')}>
               <div className="w-12 h-12 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-xl font-bold mr-3 shadow-lg">
                 MC
               </div>
-              <span className="font-serif text-2xl font-black text-[#2C2C2C] tracking-tighter hidden lg:block">MOONCREATION</span>
+              <span className="font-serif text-2xl font-black text-[#2C2C2C] tracking-tighter">MOONCREATION</span>
             </div>
 
             {/* Center: Search Bar */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-4">
+            <div className="flex-1 max-w-2xl mx-4">
               <form onSubmit={handleSearch} className="relative w-full group">
                 <input 
                   type="text" 
@@ -81,26 +81,17 @@ export default function Navbar() {
             </div>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-1 sm:gap-4">
-              {/* Language Switcher */}
+            <div className="flex items-center gap-4">
               <button 
                 onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
                 className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
-                title={language === 'en' ? 'தமிழ்-க்கு மாற்றவும்' : 'Switch to English'}
               >
-                <div className="relative">
-                  <Languages size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
-                </div>
-                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">
-                  {language === 'en' ? 'Tamil' : 'English'}
-                </span>
+                <Languages size={22} className="text-gray-600 group-hover:text-[#C48B22]" />
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{language === 'en' ? 'Tamil' : 'English'}</span>
               </button>
 
-              <button 
-                onClick={() => navigate('/wishlist')} 
-                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
-              >
-                <Heart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+              <button onClick={() => navigate('/wishlist')} className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative">
+                <Heart size={22} className="text-gray-600 group-hover:text-[#C48B22]" />
                 <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('wishlist')}</span>
                 {wishlistItems.length > 0 && (
                   <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -109,11 +100,8 @@ export default function Navbar() {
                 )}
               </button>
 
-              <button 
-                onClick={() => navigate('/cart')} 
-                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
-              >
-                <ShoppingCart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+              <button onClick={() => navigate('/cart')} className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative">
+                <ShoppingCart size={22} className="text-gray-600 group-hover:text-[#C48B22]" />
                 <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('cart')}</span>
                 {cartItems.length > 0 && (
                   <span className="absolute top-1 right-2 w-4 h-4 bg-[#C48B22] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -122,56 +110,77 @@ export default function Navbar() {
                 )}
               </button>
 
-              {!isLoggedIn ? (
-                <button 
-                  onClick={() => navigate('/login')}
-                  className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
-                >
-                  <User size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
-                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('login')}</span>
-                </button>
-              ) : (
-                <button 
-                  onClick={handleProfileClick}
-                  className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
-                >
-                  <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
-                    <User size={16} className="text-gray-600" />
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{t('myAccount')}</span>
-                </button>
-              )}
-
-              {/* Mobile Menu Toggle */}
-              <button 
-                className="md:hidden p-2.5 text-gray-500 hover:bg-gray-50 rounded-lg"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? <CloseIcon size={24} /> : <Menu size={24} />}
+              <button onClick={handleProfileClick} className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group">
+                <User size={22} className="text-gray-600 group-hover:text-[#C48B22]" />
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">{isLoggedIn ? t('myAccount') : t('login')}</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Bottom Row: Navigation Links (Desktop) */}
-        <div className="hidden md:block w-full px-4 sm:px-8 lg:px-12 bg-white overflow-x-auto no-scrollbar">
-          <div className="flex items-center justify-start h-12 gap-8 whitespace-nowrap">
-            <button className="p-2.5 text-gray-500 hover:text-[#C48B22] transition-colors">
-              <Menu size={20} />
+        {/* Mobile Header (Matching Screenshot) */}
+        <div className="md:hidden w-full bg-white px-4 py-3">
+          <div className="flex justify-between items-center mb-3">
+            <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -ml-2">
+              <Menu size={24} className="text-[#2C2C2C]" />
             </button>
-            {navLinks.map((link, index) => (
-              <div key={index} className="relative group/link h-full flex items-center">
-                <Link 
-                  to={link.path} 
-                  className={`text-sm font-bold tracking-wide flex items-center gap-1.5 transition-colors ${location.pathname === link.path ? 'text-[#C48B22]' : 'text-[#2C2C2C] hover:text-[#C48B22]'}`}
-                >
-                  {link.name}
-                  {link.hasDropdown && <ChevronDown size={14} className="group-hover/link:rotate-180 transition-transform" />}
-                  {link.isNew && <span className="bg-[#C48B22]/10 text-[#C48B22] text-[8px] font-black px-1.5 py-0.5 rounded uppercase">New</span>}
-                </Link>
-                {/* Underline effect */}
-                <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-[#C48B22] transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 ${location.pathname === link.path ? 'scale-x-100' : ''}`} />
+            
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+              <div className="w-10 h-10 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-lg font-bold shadow-md">
+                MC
               </div>
+              <div className="ml-2 flex flex-col -gap-1">
+                <span className="font-serif text-sm font-black text-[#2C2C2C] leading-none">MOON</span>
+                <span className="font-serif text-[10px] font-medium text-gray-500 tracking-[0.2em] leading-none">CREATION</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button onClick={() => navigate('/wishlist')} className="p-2 relative">
+                <Heart size={22} className="text-[#2C2C2C]" />
+                {wishlistItems.length > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-[#C48B22] text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                    {wishlistItems.length}
+                  </span>
+                )}
+              </button>
+              <button onClick={() => navigate('/cart')} className="p-2 relative">
+                <ShoppingCart size={22} className="text-[#2C2C2C]" />
+                {cartItems.length > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-[#C48B22] text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                    {cartItems.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Search Bar */}
+          <form onSubmit={handleSearch} className="relative">
+            <input 
+              type="text" 
+              placeholder={t('searchPlaceholder')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-5 pr-12 py-3 bg-gray-50 border border-gray-100 rounded-lg text-sm font-medium outline-none focus:bg-white focus:border-[#C48B22] transition-all"
+            />
+            <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 bg-[#C48B22] text-white rounded-r-lg">
+              <Search size={18} />
+            </button>
+          </form>
+        </div>
+
+        {/* Desktop Bottom Row */}
+        <div className="hidden md:block w-full px-4 sm:px-8 lg:px-12 bg-white border-t border-gray-50">
+          <div className="flex items-center justify-start h-12 gap-8 overflow-x-auto no-scrollbar whitespace-nowrap">
+            {navLinks.map((link, index) => (
+              <Link 
+                key={index}
+                to={link.path} 
+                className={`text-sm font-bold tracking-wide transition-colors ${location.pathname === link.path ? 'text-[#C48B22]' : 'text-[#2C2C2C] hover:text-[#C48B22]'}`}
+              >
+                {link.name}
+              </Link>
             ))}
           </div>
         </div>
@@ -180,76 +189,37 @@ export default function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div 
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              className="md:hidden fixed inset-0 z-50 bg-white p-6 space-y-8 overflow-y-auto"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              className="md:hidden fixed inset-0 z-[60] bg-white p-6"
             >
               <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-lg font-bold mr-3">MC</div>
-                  <span className="font-serif text-xl font-black text-[#2C2C2C]">MOONCREATION</span>
+                  <div className="w-10 h-10 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-lg font-bold">MC</div>
+                  <span className="ml-3 font-serif text-xl font-bold">MOONCREATION</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-gray-50 rounded-full">
                   <CloseIcon size={24} />
                 </button>
               </div>
-
-              <form onSubmit={handleSearch} className="relative">
-                <input 
-                  type="text" 
-                  placeholder={t('searchPlaceholder')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-6 pr-14 py-4 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium outline-none"
-                />
-                <button type="submit" className="absolute right-2 top-2 bottom-2 px-3 bg-[#C48B22] text-white rounded-lg">
-                  <Search size={18} />
-                </button>
-              </form>
-
-              <div className="space-y-2">
+              <div className="space-y-4">
                 {navLinks.map((link, index) => (
                   <Link 
                     key={index}
                     to={link.path}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                    className="block p-4 bg-gray-50 rounded-xl font-bold text-sm"
                   >
-                    <span className="text-sm font-bold text-[#2C2C2C]">{link.name}</span>
-                    {link.isNew && <span className="bg-[#C48B22] text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase">New</span>}
+                    {link.name}
                   </Link>
                 ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
-                 <button 
-                  onClick={() => { setLanguage(language === 'en' ? 'ta' : 'en'); setIsMobileMenuOpen(false); }} 
-                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
-                >
-                  <Languages size={24} className="text-[#C48B22]" />
-                  <span className="text-xs font-bold">{language === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}</span>
-                </button>
                 <button 
-                  onClick={() => { navigate('/wishlist'); setIsMobileMenuOpen(false); }}
-                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
+                  onClick={() => { setLanguage(language === 'en' ? 'ta' : 'en'); setIsMobileMenuOpen(false); }}
+                  className="w-full text-left p-4 bg-gray-50 rounded-xl font-bold text-sm flex items-center gap-3"
                 >
-                  <Heart size={24} className="text-[#C48B22]" />
-                  <span className="text-xs font-bold">{t('wishlist')}</span>
-                </button>
-                <button 
-                  onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }}
-                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
-                >
-                  <ShoppingCart size={24} className="text-[#C48B22]" />
-                  <span className="text-xs font-bold">{t('cart')}</span>
-                </button>
-                <button 
-                  onClick={() => { handleProfileClick(); setIsMobileMenuOpen(false); }}
-                  className="flex flex-col items-center justify-center p-4 bg-[#2C2C2C] text-white rounded-xl gap-2"
-                >
-                  <User size={24} />
-                  <span className="text-xs font-bold">{isLoggedIn ? t('myAccount') : t('login')}</span>
+                  <Languages size={20} className="text-[#C48B22]" />
+                  {language === 'en' ? 'Tamil (தமிழ்)' : 'English'}
                 </button>
               </div>
             </motion.div>
