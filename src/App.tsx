@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { StoreProvider } from './context/StoreContext';
 import Home from './pages/Home';
@@ -70,7 +70,7 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <StoreProvider>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
             {/* Public Routes - MOONCREATION UI with Navbar & Footer */}
             <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -104,7 +104,7 @@ export default function App() {
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </StoreProvider>
       </AuthProvider>
     </ErrorBoundary>
