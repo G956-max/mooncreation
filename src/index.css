@@ -17,3 +17,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
 
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+

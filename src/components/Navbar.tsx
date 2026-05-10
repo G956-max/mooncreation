@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon, Languages, Check } from 'lucide-react';
+import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon, Languages, Check, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -19,9 +19,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const isLoginActive = location.pathname === '/login';
-  const isAdminRoute = location.pathname.startsWith('/admin');
-
   const handleProfileClick = () => {
     if (role === 'admin') {
       navigate('/admin');
@@ -38,56 +35,75 @@ export default function Navbar() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // For now we navigate to categories with a search param or just keep it simple
       navigate(`/categories?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
     }
   };
 
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'All Categories', path: '/categories' },
+    { name: 'Occasion', path: '#', hasDropdown: true },
+    { name: 'Personalized Gifts', path: '#', hasDropdown: true },
+    { name: 'Gifts by Person', path: '#', hasDropdown: true },
+    { name: 'Combo Gifts', path: '#', hasDropdown: true },
+    { name: 'Customized Studio', path: '#', isNew: true },
+  ];
+
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+      <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+        {/* Top Row: Logo, Search, Actions */}
+        <div className="w-full px-4 sm:px-6 lg:px-8 border-b border-gray-50">
+          <div className="flex justify-between items-center h-20 gap-4">
             {/* Left: Logo */}
             <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigate('/')}>
-              <span className="font-serif text-2xl font-black text-[#2C2C2C] tracking-tighter">MOONCREATION</span>
+              <div className="w-12 h-12 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-xl font-bold mr-3 shadow-lg">
+                MC
+              </div>
+              <span className="font-serif text-2xl font-black text-[#2C2C2C] tracking-tighter hidden lg:block">MOONCREATION</span>
             </div>
 
-            {/* Center: Search Bar (Desktop) */}
-            <div className="hidden md:flex flex-1 max-w-lg mx-12">
+            {/* Center: Search Bar */}
+            <div className="hidden md:flex flex-1 max-w-2xl mx-4">
               <form onSubmit={handleSearch} className="relative w-full group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400 group-focus-within:text-black transition-colors" />
-                </div>
                 <input 
                   type="text" 
-                  placeholder={t('searchPlaceholder')}
+                  placeholder="Search for gifts, occasions, products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-2xl text-sm font-medium placeholder-gray-400 focus:bg-white focus:border-gray-200 focus:ring-4 focus:ring-black/5 outline-none transition-all"
+                  className="block w-full pl-6 pr-14 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium placeholder-gray-400 focus:bg-white focus:border-[#C48B22] focus:ring-4 focus:ring-[#C48B22]/5 outline-none transition-all"
                 />
+                <button type="submit" className="absolute right-0 top-0 bottom-0 px-4 bg-[#C48B22] text-white rounded-r-lg hover:bg-[#A6751C] transition-colors">
+                  <Search size={20} />
+                </button>
               </form>
             </div>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-1 sm:gap-4">
+              {/* Language Switcher */}
               <button 
-                onClick={() => navigate('/')} 
-                className={`p-2.5 rounded-full transition-all hidden sm:flex items-center gap-2 ${location.pathname === '/' ? 'bg-black text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'}`}
-                title={t('home')}
+                onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
+                title={language === 'en' ? 'தமிழ்-க்கு மாற்றவும்' : 'Switch to English'}
               >
-                <HomeIcon size={20} />
+                <div className="relative">
+                  <Languages size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+                </div>
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">
+                  {language === 'en' ? 'Tamil' : 'English'}
+                </span>
               </button>
 
               <button 
                 onClick={() => navigate('/wishlist')} 
-                className={`p-2.5 rounded-full transition-all relative ${location.pathname === '/wishlist' ? 'bg-black text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'}`}
-                title={t('wishlist')}
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
               >
-                <Heart size={20} />
+                <Heart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Wishlist</span>
                 {wishlistItems.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -95,134 +111,146 @@ export default function Navbar() {
 
               <button 
                 onClick={() => navigate('/cart')} 
-                className={`p-2.5 rounded-full transition-all relative ${location.pathname === '/cart' ? 'bg-black text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-black'}`}
-                title={t('cart')}
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group relative"
               >
-                <ShoppingCart size={20} />
+                <ShoppingCart size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+                <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Cart</span>
                 {cartItems.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[#2C2C2C] text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  <span className="absolute top-1 right-2 w-4 h-4 bg-[#C48B22] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {cartItems.length}
                   </span>
                 )}
               </button>
 
-              <div className="hidden sm:block w-px h-6 bg-gray-100 mx-1"></div>
-
-              {/* Language Switcher */}
-              <button 
-                onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
-                className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-all group"
-                title={language === 'en' ? 'தமிழ்-க்கு மாற்றவும்' : 'Switch to English'}
-              >
-                <div className="relative">
-                  <Languages size={20} className="text-gray-500 group-hover:text-black transition-colors" />
-                  <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white">
-                    {language === 'en' ? 'E' : 'த'}
-                  </span>
-                </div>
-                <span className="text-xs font-bold ml-2 hidden lg:block">
-                  {language === 'en' ? 'English' : 'தமிழ்'}
-                </span>
-              </button>
-
-              <div className="hidden lg:block w-px h-6 bg-gray-100 mx-1"></div>
-
               {!isLoggedIn ? (
                 <button 
                   onClick={() => navigate('/login')}
-                  className="hidden sm:block ml-2 px-6 py-2.5 bg-black text-white rounded-full text-sm font-bold hover:bg-gray-800 transition-all shadow-sm active:scale-95"
+                  className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
                 >
-                  {t('login')}
+                  <User size={22} className="text-gray-600 group-hover:text-[#C48B22] transition-colors" />
+                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Login</span>
                 </button>
               ) : (
                 <button 
                   onClick={handleProfileClick}
-                  className={`p-1.5 border-2 transition-all ${location.pathname === '/profile' || location.pathname.startsWith('/admin') ? 'border-black' : 'border-transparent hover:border-gray-200'} rounded-full`}
-                  title={t('myAccount')}
+                  className="flex flex-col items-center p-2 rounded-lg hover:bg-gray-50 transition-all group"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
-                    <User size={18} className="text-gray-600" />
+                  <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
+                    <User size={16} className="text-gray-600" />
                   </div>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase mt-1">Account</span>
                 </button>
               )}
 
-              {/* Mobile: Search & Menu Toggle */}
-              <div className="md:hidden flex items-center gap-1">
-                <button 
-                  className="p-2.5 text-gray-500 hover:bg-gray-50 rounded-full"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                >
-                  {isMobileMenuOpen ? <CloseIcon size={22} /> : <Menu size={22} />}
-                </button>
-              </div>
+              {/* Mobile Menu Toggle */}
+              <button 
+                className="md:hidden p-2.5 text-gray-500 hover:bg-gray-50 rounded-lg"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <CloseIcon size={24} /> : <Menu size={24} />}
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu & Search Overlay */}
+        {/* Bottom Row: Navigation Links (Desktop) */}
+        <div className="hidden md:block w-full px-4 sm:px-6 lg:px-8 bg-white overflow-x-auto no-scrollbar">
+          <div className="flex items-center justify-start h-12 gap-8 whitespace-nowrap">
+            <button className="p-2.5 text-gray-500 hover:text-[#C48B22] transition-colors">
+              <Menu size={20} />
+            </button>
+            {navLinks.map((link, index) => (
+              <div key={index} className="relative group/link h-full flex items-center">
+                <Link 
+                  to={link.path} 
+                  className={`text-sm font-bold tracking-wide flex items-center gap-1.5 transition-colors ${location.pathname === link.path ? 'text-[#C48B22]' : 'text-[#2C2C2C] hover:text-[#C48B22]'}`}
+                >
+                  {link.name}
+                  {link.hasDropdown && <ChevronDown size={14} className="group-hover/link:rotate-180 transition-transform" />}
+                  {link.isNew && <span className="bg-[#C48B22]/10 text-[#C48B22] text-[8px] font-black px-1.5 py-0.5 rounded uppercase">New</span>}
+                </Link>
+                {/* Underline effect */}
+                <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-[#C48B22] transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 ${location.pathname === link.path ? 'scale-x-100' : ''}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="md:hidden bg-white border-t border-gray-50 p-6 space-y-6 shadow-xl"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              className="md:hidden fixed inset-0 z-50 bg-white p-6 space-y-8 overflow-y-auto"
             >
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-[#C48B22] rounded-full flex items-center justify-center text-white font-serif text-lg font-bold mr-3">MC</div>
+                  <span className="font-serif text-xl font-black text-[#2C2C2C]">MOONCREATION</span>
+                </div>
+                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-gray-50 rounded-full">
+                  <CloseIcon size={24} />
+                </button>
+              </div>
+
               <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input 
                   type="text" 
-                  autoFocus
-                  placeholder={t('searchPlaceholder')}
+                  placeholder="Search for gifts..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-sm font-medium outline-none focus:ring-2 focus:ring-black/5"
+                  className="w-full pl-6 pr-14 py-4 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium outline-none"
                 />
+                <button type="submit" className="absolute right-2 top-2 bottom-2 px-3 bg-[#C48B22] text-white rounded-lg">
+                  <Search size={18} />
+                </button>
               </form>
 
-              <div className="grid grid-cols-2 gap-4">
-                <button 
-                  onClick={() => { setLanguage(language === 'en' ? 'ta' : 'en'); setIsMobileMenuOpen(false); }} 
-                  className="col-span-2 flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors border border-dashed border-gray-200"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
-                      {language === 'en' ? 'EN' : 'த'}
-                    </div>
-                    <span className="text-xs font-bold uppercase tracking-wider">
-                      {language === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}
-                    </span>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: language === 'en' ? 0 : 180 }}
-                    className="text-gray-400"
+              <div className="space-y-2">
+                {navLinks.map((link, index) => (
+                  <Link 
+                    key={index}
+                    to={link.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                   >
-                    <Check size={16} />
-                  </motion.div>
+                    <span className="text-sm font-bold text-[#2C2C2C]">{link.name}</span>
+                    {link.isNew && <span className="bg-[#C48B22] text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase">New</span>}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
+                 <button 
+                  onClick={() => { setLanguage(language === 'en' ? 'ta' : 'en'); setIsMobileMenuOpen(false); }} 
+                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
+                >
+                  <Languages size={24} className="text-[#C48B22]" />
+                  <span className="text-xs font-bold">{language === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}</span>
                 </button>
-                <button onClick={() => { navigate('/'); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
-                  <div className="p-2 bg-white rounded-lg shadow-sm"><HomeIcon size={18} /></div>
-                  <span className="text-xs font-bold uppercase tracking-wider">{t('home')}</span>
+                <button 
+                  onClick={() => { navigate('/wishlist'); setIsMobileMenuOpen(false); }}
+                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
+                >
+                  <Heart size={24} className="text-[#C48B22]" />
+                  <span className="text-xs font-bold">Wishlist</span>
                 </button>
-                <button onClick={() => { navigate('/wishlist'); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
-                  <div className="p-2 bg-white rounded-lg shadow-sm"><Heart size={18} /></div>
-                  <span className="text-xs font-bold uppercase tracking-wider">{t('wishlist')}</span>
+                <button 
+                  onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }}
+                  className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl gap-2"
+                >
+                  <ShoppingCart size={24} className="text-[#C48B22]" />
+                  <span className="text-xs font-bold">Cart</span>
                 </button>
-                <button onClick={() => { navigate('/cart'); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
-                  <div className="p-2 bg-white rounded-lg shadow-sm"><ShoppingCart size={18} /></div>
-                  <span className="text-xs font-bold uppercase tracking-wider">{t('cart')}</span>
+                <button 
+                  onClick={() => { handleProfileClick(); setIsMobileMenuOpen(false); }}
+                  className="flex flex-col items-center justify-center p-4 bg-[#2C2C2C] text-white rounded-xl gap-2"
+                >
+                  <User size={24} />
+                  <span className="text-xs font-bold">{isLoggedIn ? 'Account' : 'Login'}</span>
                 </button>
-                {!isLoggedIn ? (
-                  <button onClick={() => { navigate('/login'); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-black text-white rounded-2xl hover:bg-gray-800 transition-colors">
-                    <div className="p-2 bg-white/10 rounded-lg"><User size={18} /></div>
-                    <span className="text-xs font-bold uppercase tracking-wider">{t('login')}</span>
-                  </button>
-                ) : (
-                  <button onClick={() => { handleProfileClick(); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors">
-                    <div className="p-2 bg-white/10 rounded-lg"><User size={18} /></div>
-                    <span className="text-xs font-bold uppercase tracking-wider">{t('myAccount')}</span>
-                  </button>
-                )}
               </div>
             </motion.div>
           )}

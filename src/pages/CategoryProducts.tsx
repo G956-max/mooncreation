@@ -47,22 +47,11 @@ export default function CategoryProducts() {
         );
         
         const querySnapshot = await getDocs(q);
-        let productsList = querySnapshot.docs.map(doc => ({
+        const productsList = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         })) as FirebaseProduct[];
         
-        // If status == '' doesn't work well with 'in', let's fetch by category, and filter status
-        const catQuery = query(
-          collection(db, 'products'),
-          where('category', '==', categoryName)
-        );
-        const catSnapshot = await getDocs(catQuery);
-        productsList = catSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as FirebaseProduct[];
-
         const publishedProducts = productsList.filter(p => p.status === 'published' || !p.status);
         setProducts(publishedProducts);
       } catch (err) {

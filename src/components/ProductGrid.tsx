@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Star } from 'lucide-react';
 import { Product as MockProduct, getRandomProducts } from '../data/products';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 import { collection, getDocs } from 'firebase/firestore';
@@ -74,12 +75,15 @@ export default function ProductGrid({ title, count = 8 }: ProductGridProps) {
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </div>
-            <div className="flex justify-between items-start flex-1">
-              <div className="flex flex-col justify-between h-full">
-                <h3 className="text-lg font-medium text-[#2C2C2C] line-clamp-1">{product.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">{product.category}</p>
+            <div className="flex flex-col flex-1 p-2">
+              <h3 className="text-sm font-bold text-[#2C2C2C] line-clamp-1 group-hover:text-[#C48B22] transition-colors">{product.name}</h3>
+              <div className="flex justify-between items-center mt-2">
+                <p className="text-lg font-black text-[#2C2C2C]">₹{product.price}</p>
+                <div className="flex items-center gap-1 bg-yellow-50 px-2 py-0.5 rounded-md">
+                  <span className="text-[10px] font-bold text-yellow-700">4.9</span>
+                  <Star size={10} className="fill-yellow-400 text-yellow-400" />
+                </div>
               </div>
-              <p className="text-lg font-medium text-[#2C2C2C] ml-4 shrink-0">${product.price}</p>
             </div>
           </Link>
         ))}
