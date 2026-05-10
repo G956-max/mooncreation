@@ -28,17 +28,19 @@ export default function FeatureBar() {
   ];
 
   return (
-    <div className="bg-white border-y border-gray-100 py-8">
+    <div className="bg-white border-y border-gray-100 py-10">
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="flex flex-wrap justify-between items-center gap-y-8">
           {features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-4 group">
-              <div className="p-3 bg-[#FAF9F6] rounded-xl group-hover:scale-110 transition-transform duration-300 shrink-0">
-                {feature.icon}
+            <div key={index} className="flex items-center gap-5 group w-full sm:w-1/2 lg:w-1/4 px-2">
+              <div className="p-4 bg-[#FAF9F6] rounded-2xl group-hover:bg-[#C48B22] group-hover:text-white transition-all duration-300 shrink-0 shadow-sm">
+                <div className="group-hover:scale-110 transition-transform duration-300">
+                  {feature.icon}
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-[#2C2C2C]">{feature.title}</h3>
-                <p className="text-xs text-gray-500">{feature.subtitle}</p>
+              <div className="flex flex-col">
+                <h3 className="text-sm font-bold text-[#2C2C2C] uppercase tracking-wide">{feature.title}</h3>
+                <p className="text-[11px] text-gray-500 mt-0.5">{feature.subtitle}</p>
               </div>
             </div>
           ))}
