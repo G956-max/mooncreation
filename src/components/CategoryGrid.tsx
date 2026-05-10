@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Category {
   id: string;
@@ -24,6 +25,7 @@ interface CategoryGridProps {
 export default function CategoryGrid({ title }: CategoryGridProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'categories'), (snapshot) => {
@@ -54,7 +56,7 @@ export default function CategoryGrid({ title }: CategoryGridProps) {
             onClick={() => navigate('/categories')}
             className="text-sm font-medium text-gray-500 hover:text-black transition-colors border-b border-transparent hover:border-black pb-1"
           >
-            View All
+            {t('viewAll')}
           </button>
         )}
       </div>

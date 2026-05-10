@@ -7,6 +7,7 @@ import { useRequireAuth } from '../hooks/useRequireAuth';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useLanguage } from '../context/LanguageContext';
 
 const heroSlides = [
   {
@@ -29,6 +30,7 @@ const heroSlides = [
 export default function Home() {
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState(heroSlides);
 
@@ -107,7 +109,7 @@ export default function Home() {
                       }}
                       className="bg-white text-[#2C2C2C] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-xl mt-4"
                     >
-                      Shop the Collection
+                      {t('shopCollection')}
                     </button>
                   </div>
                 </div>
@@ -118,41 +120,44 @@ export default function Home() {
         </div>
 
         {/* Controls */}
-        <button 
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        <button 
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={24} />
-        </button>
+        {slides.length > 1 && (
+          <>
+            <button 
+              onClick={prevSlide}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} />
+            </button>
 
-        {/* Dots */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${
-                index === currentSlide ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/80'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    index === currentSlide ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/80'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* Explore by Material */}
-      <CategoryGrid title="Explore by Material" />
+      <CategoryGrid title={t('exploreMaterial')} />
       
       {/* Featured Creations */}
-      <ProductGrid title="Featured Creations" count={8} />
+      <ProductGrid title={t('featuredCreations')} count={8} />
     </div>
   );
 }
