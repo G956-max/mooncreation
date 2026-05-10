@@ -5,7 +5,7 @@ export default function SpecialOffers() {
   const { t } = useLanguage();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="w-full mx-auto px-4 sm:px-8 lg:px-12 py-12">
       <div className="bg-[#FAF9F6] rounded-3xl overflow-hidden border border-[#C48B22]/10 shadow-sm flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-8 relative">
         <div className="flex items-center gap-6">
           <div className="p-5 bg-white rounded-2xl shadow-sm text-[#C48B22] shrink-0">

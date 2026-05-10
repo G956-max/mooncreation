@@ -29,7 +29,7 @@ export default function FeatureBar() {
 
   return (
     <div className="bg-white border-y border-gray-100 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {features.map((feature, index) => (
             <div key={index} className="flex items-center gap-4 group">

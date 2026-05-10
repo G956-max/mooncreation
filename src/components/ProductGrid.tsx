@@ -48,7 +48,7 @@ export default function ProductGrid({ title, count = 8 }: ProductGridProps) {
   }, [count]);
 
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8 py-16">
+    <section className="w-full px-4 sm:px-8 lg:px-12 py-16">
       <div className="flex justify-between items-end mb-4 m-0 p-0">
         <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] m-0 leading-none">{title}</h2>
         <button 

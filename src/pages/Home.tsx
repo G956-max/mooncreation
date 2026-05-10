@@ -80,7 +80,7 @@ export default function Home() {
                 index === currentSlide ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 pointer-events-none'
               }`}
             >
-              <div className="flex flex-col md:flex-row items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-0">
+              <div className="flex flex-col md:flex-row items-center h-full w-full mx-auto px-4 sm:px-8 lg:px-12 py-12 md:py-0">
                 <div className="w-full md:w-1/2 space-y-6 md:space-y-8 text-center md:text-left z-20">
                   <h1 className="text-4xl md:text-6xl font-serif text-[#2C2C2C] font-bold leading-tight">
                     {slide.title}

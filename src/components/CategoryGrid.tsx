@@ -51,7 +51,7 @@ export default function CategoryGrid({ title }: CategoryGridProps) {
   }, []);
 
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8 py-16 bg-white">
+    <section className="w-full px-4 sm:px-8 lg:px-12 py-16 bg-white">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-bold text-[#2C2C2C]">{title}</h2>
         <button 

@@ -54,7 +54,7 @@ export default function Navbar() {
     <>
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         {/* Top Row: Logo, Search, Actions */}
-        <div className="w-full px-4 sm:px-6 lg:px-8 border-b border-gray-50">
+        <div className="w-full px-4 sm:px-8 lg:px-12 border-b border-gray-50">
           <div className="flex justify-between items-center h-20 gap-4">
             {/* Left: Logo */}
             <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigate('/')}>
@@ -154,7 +154,7 @@ export default function Navbar() {
         </div>
 
         {/* Bottom Row: Navigation Links (Desktop) */}
-        <div className="hidden md:block w-full px-4 sm:px-6 lg:px-8 bg-white overflow-x-auto no-scrollbar">
+        <div className="hidden md:block w-full px-4 sm:px-8 lg:px-12 bg-white overflow-x-auto no-scrollbar">
           <div className="flex items-center justify-start h-12 gap-8 whitespace-nowrap">
             <button className="p-2.5 text-gray-500 hover:text-[#C48B22] transition-colors">
               <Menu size={20} />

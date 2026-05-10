@@ -15,7 +15,7 @@ export default function WhyChooseUs() {
 
   return (
     <section className="bg-white py-20 border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-8 lg:px-12">
         <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-16">{t('whyChooseUs')}</h2>
         
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
