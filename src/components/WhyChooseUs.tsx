@@ -16,7 +16,7 @@ export default function WhyChooseUs() {
   return (
     <section className="bg-white py-20 border-t border-gray-100">
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-12">
-        <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-32">{t('whyChooseUs')}</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-48">{t('whyChooseUs')}</h2>
         
         <div className="flex flex-wrap justify-between gap-y-12">
           {stats.map((stat, index) => (
