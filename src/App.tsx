@@ -24,6 +24,7 @@ import UserDashboard from './pages/UserDashboard';
 import Profile from './pages/Profile';
 import ProductDetail from './pages/ProductDetail';
 import AdminBanners from './pages/AdminBanners';
+import AdminSubcategories from './pages/AdminSubcategories';
 import Checkout from './pages/Checkout';
 import Cart from './pages/Cart';
 import Wishlist from './pages/Wishlist';
@@ -97,6 +98,7 @@ export default function App() {
             <Route path="/admin/customers" element={<ProtectedAdminRoute><AdminCustomers /></ProtectedAdminRoute>} />
             <Route path="/admin/discounts" element={<ProtectedAdminRoute><AdminDiscounts /></ProtectedAdminRoute>} />
             <Route path="/admin/categories" element={<ProtectedAdminRoute><AdminCategories /></ProtectedAdminRoute>} />
+            <Route path="/admin/subcategories" element={<ProtectedAdminRoute><AdminSubcategories /></ProtectedAdminRoute>} />
             <Route path="/admin/banners" element={<ProtectedAdminRoute><AdminBanners /></ProtectedAdminRoute>} />
             <Route path="/admin/contact" element={<ProtectedAdminRoute><AdminContact /></ProtectedAdminRoute>} />
             <Route path="/admin/settings" element={<ProtectedAdminRoute><AdminSettings /></ProtectedAdminRoute>} />

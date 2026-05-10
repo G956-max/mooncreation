@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   Folder,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Layers
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -37,6 +38,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { group: 'STORE MANAGEMENT', items: [
       { name: 'Products', icon: Package, path: '/admin/products' },
       { name: 'Categories', icon: Folder, path: '/admin/categories' },
+      { name: 'Subcategories', icon: Layers, path: '/admin/subcategories' },
       { name: 'Orders', icon: ShoppingCart, path: '/admin/orders' },
       { name: 'Customers', icon: Users, path: '/admin/customers' },
       { name: 'Discounts', icon: Tag, path: '/admin/discounts' },

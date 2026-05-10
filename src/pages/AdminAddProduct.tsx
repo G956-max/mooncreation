@@ -435,39 +435,44 @@ export default function AdminAddProduct() {
             
             <div>
               <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Category</label>
-              <input 
-                type="text" 
-                list="category-suggestions"
-                placeholder="e.g. Ceramics (Select or type new)"
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value, subCategory: '' })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
-              />
-              <datalist id="category-suggestions">
-                {availableCategories.map((cat, idx) => (
-                  <option key={idx} value={cat.name} />
-                ))}
-              </datalist>
+              <div className="relative">
+                <select 
+                  required
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value, subCategory: '' })}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-[#2C2C2C]/10 outline-none transition-all cursor-pointer"
+                >
+                  <option value="">Select Category</option>
+                  {availableCategories.map((cat, idx) => (
+                    <option key={idx} value={cat.name}>{cat.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+              </div>
             </div>
 
-            {availableCategories.find(c => c.name === form.category)?.subcategories?.length ? (
-              <div className="mt-4">
+            {form.category && (
+              <div className="mt-4 animate-in fade-in slide-in-from-top-1 duration-200">
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Subcategory</label>
                 <div className="relative">
                   <select 
                     value={form.subCategory || ''}
                     onChange={(e) => setForm({ ...form, subCategory: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-[#2C2C2C]/10 outline-none transition-all cursor-pointer"
+                    className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm appearance-none focus:ring-2 focus:ring-[#2C2C2C]/10 outline-none transition-all cursor-pointer disabled:opacity-50"
+                    disabled={!availableCategories.find(c => c.name === form.category)?.subcategories?.length}
                   >
-                    <option value="">Select Subcategory (Optional)</option>
+                    <option value="">{availableCategories.find(c => c.name === form.category)?.subcategories?.length ? 'Select Subcategory' : 'No Subcategories Available'}</option>
                     {availableCategories.find(c => c.name === form.category)?.subcategories?.map((sub, idx) => (
                       <option key={idx} value={sub}>{sub}</option>
                     ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                 </div>
+                {!availableCategories.find(c => c.name === form.category)?.subcategories?.length && (
+                  <p className="text-[10px] text-gray-400 mt-1 italic">Go to Subcategories management to add sub-labels for this category.</p>
+                )}
               </div>
-            ) : null}
+            )}
 
           </div>
         </div>
