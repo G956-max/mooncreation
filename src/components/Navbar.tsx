@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon } from 'lucide-react';
+import { Search, ShoppingCart, User, Heart, Home as HomeIcon, Menu, X as CloseIcon, Languages, Check } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -111,13 +111,16 @@ export default function Navbar() {
               {/* Language Switcher */}
               <button 
                 onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100"
+                className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-all group"
                 title={language === 'en' ? 'தமிழ்-க்கு மாற்றவும்' : 'Switch to English'}
               >
-                <div className="w-6 h-6 rounded-full bg-[#2C2C2C] text-white flex items-center justify-center text-[10px] font-bold">
-                  {language === 'en' ? 'EN' : 'த'}
+                <div className="relative">
+                  <Languages size={20} className="text-gray-500 group-hover:text-black transition-colors" />
+                  <span className="absolute -top-1 -right-1 bg-black text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white">
+                    {language === 'en' ? 'E' : 'த'}
+                  </span>
                 </div>
-                <span className="text-xs font-bold hidden lg:block">
+                <span className="text-xs font-bold ml-2 hidden lg:block">
                   {language === 'en' ? 'English' : 'தமிழ்'}
                 </span>
               </button>
