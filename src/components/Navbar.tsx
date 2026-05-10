@@ -11,7 +11,7 @@ import ConfirmModal from './ConfirmModal';
 export default function Navbar() {
   const { isLoggedIn, role, logout } = useAuth();
   const { cartItems, wishlistItems } = useStore();
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const requireAuth = useRequireAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -108,6 +108,22 @@ export default function Navbar() {
 
               <div className="hidden sm:block w-px h-6 bg-gray-100 mx-1"></div>
 
+              {/* Language Switcher */}
+              <button 
+                onClick={() => setLanguage(language === 'en' ? 'ta' : 'en')}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100"
+                title={language === 'en' ? 'தமிழ்-க்கு மாற்றவும்' : 'Switch to English'}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#2C2C2C] text-white flex items-center justify-center text-[10px] font-bold">
+                  {language === 'en' ? 'EN' : 'த'}
+                </div>
+                <span className="text-xs font-bold hidden lg:block">
+                  {language === 'en' ? 'English' : 'தமிழ்'}
+                </span>
+              </button>
+
+              <div className="hidden lg:block w-px h-6 bg-gray-100 mx-1"></div>
+
               {!isLoggedIn ? (
                 <button 
                   onClick={() => navigate('/login')}
@@ -162,6 +178,25 @@ export default function Navbar() {
               </form>
 
               <div className="grid grid-cols-2 gap-4">
+                <button 
+                  onClick={() => { setLanguage(language === 'en' ? 'ta' : 'en'); setIsMobileMenuOpen(false); }} 
+                  className="col-span-2 flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors border border-dashed border-gray-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
+                      {language === 'en' ? 'EN' : 'த'}
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-wider">
+                      {language === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}
+                    </span>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: language === 'en' ? 0 : 180 }}
+                    className="text-gray-400"
+                  >
+                    <Check size={16} />
+                  </motion.div>
+                </button>
                 <button onClick={() => { navigate('/'); setIsMobileMenuOpen(false); }} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
                   <div className="p-2 bg-white rounded-lg shadow-sm"><HomeIcon size={18} /></div>
                   <span className="text-xs font-bold uppercase tracking-wider">{t('home')}</span>
