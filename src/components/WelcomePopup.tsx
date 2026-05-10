@@ -38,37 +38,60 @@ export default function WelcomePopup() {
             <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-[#2C2C2C]/5 rounded-full blur-3xl"></div>
 
             <div className="p-8 text-center relative z-10">
-              {/* Gift Box Animation */}
-              <motion.div 
-                className="mb-6 flex justify-center"
-                animate={{ 
-                  rotate: [0, -10, 10, -10, 10, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "loop"
-                }}
-              >
-                <div className="relative">
-                  <motion.div
-                    animate={{ y: [0, -15, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    className="p-5 bg-[#2C2C2C] text-white rounded-2xl shadow-xl shadow-black/20"
+              {/* Gift Box Opening Animation */}
+              <div className="mb-10 flex justify-center scale-110">
+                <div className="relative w-24 h-24">
+                  {/* Box Base */}
+                  <motion.div 
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute bottom-0 left-0 w-full h-16 bg-[#2C2C2C] rounded-xl shadow-lg flex items-center justify-center overflow-hidden"
                   >
-                    <Gift size={48} strokeWidth={1.5} />
+                    <div className="absolute inset-0 border-t-4 border-[#2C2C2C]/20 flex justify-center">
+                      <div className="w-4 h-full bg-yellow-400/20"></div>
+                    </div>
+                    <Gift size={32} className="text-white/20" />
                   </motion.div>
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 0] }}
-                    transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5 }}
-                    className="absolute -top-2 -right-2 text-yellow-400"
+                  
+                  {/* Box Lid */}
+                  <motion.div 
+                    initial={{ y: 0, rotate: 0 }}
+                    animate={{ 
+                      y: [0, -25, -20, -25, 0],
+                      rotate: [0, -5, 5, -5, 0],
+                      x: [0, 2, -2, 2, 0]
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity,
+                      times: [0, 0.2, 0.4, 0.6, 1],
+                      ease: "easeInOut"
+                    }}
+                    className="absolute top-4 left-[-4px] w-[104px] h-6 bg-[#3D3D3D] rounded-lg shadow-xl z-20 flex items-center justify-center border-b border-black/10"
                   >
-                    <div className="w-4 h-4 bg-yellow-400 rounded-full blur-sm"></div>
+                    {/* Ribbon Bow */}
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-end">
+                      <div className="w-6 h-6 border-4 border-yellow-400 rounded-full"></div>
+                      <div className="w-6 h-6 border-4 border-yellow-400 rounded-full -ml-2"></div>
+                    </div>
+                    <div className="w-full h-1 bg-yellow-400 absolute top-1/2 -translate-y-1/2 opacity-30"></div>
+                  </motion.div>
+
+                  {/* Sparkles inside */}
+                  <motion.div
+                    animate={{ 
+                      opacity: [0, 1, 0],
+                      scale: [0.5, 1.5, 0.5],
+                      y: [0, -40, -60]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                    className="absolute top-8 left-1/2 -translate-x-1/2 text-yellow-400 z-10"
+                  >
+                    <Check size={20} strokeWidth={3} />
                   </motion.div>
                 </div>
-              </motion.div>
+              </div>
 
               <h2 className="text-2xl font-serif font-bold text-[#2C2C2C] mb-2">
                 Welcome to MOONCREATION
