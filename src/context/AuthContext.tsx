@@ -7,14 +7,25 @@ import {
   onAuthStateChanged,
   User
 } from 'firebase/auth';
-import { collection, query, where, getDocs, setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, setDoc, doc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 
 type Role = 'user' | 'admin';
+
+export interface UserData {
+  email: string;
+  phone: string;
+  role: Role;
+  firstName?: string;
+  lastName?: string;
+  location?: string;
+  createdAt?: any;
+}
 
 interface AuthContextType {
   isLoggedIn: boolean;
   role: Role | null;
   user: User | null;
+  userData: UserData | null;
   loginAdmin: (email: string, password: string) => Promise<void>;
   loginUser: (identifier: string, password: string) => Promise<void>;
   signupUser: (email: string, phone: string, password: string) => Promise<void>;
@@ -31,10 +42,12 @@ const ADMIN_EMAIL = 'admin@mooncreation.com';
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<Role | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    let unsubscribeDoc: (() => void) | undefined;
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         // Admin check based on standard ID
@@ -43,12 +56,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
           setRole('user');
         }
+
+        unsubscribeDoc = onSnapshot(doc(db, 'users', currentUser.uid), (docSnap) => {
+          if (docSnap.exists()) {
+            setUserData(docSnap.data() as UserData);
+          } else {
+            setUserData(null);
+          }
+        });
       } else {
         setRole(null);
+        setUserData(null);
+        if (unsubscribeDoc) unsubscribeDoc();
       }
       setIsAuthReady(true);
     });
-    return unsubscribe;
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeDoc) unsubscribeDoc();
+    };
   }, []);
 
   const loginAdmin = async (email: string, password: string) => {
@@ -138,7 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn: !!user, role, user, loginAdmin, loginUser, signupUser, logout, isAuthReady, loading: !isAuthReady }}>
+    <AuthContext.Provider value={{ isLoggedIn: !!user, role, user, userData, loginAdmin, loginUser, signupUser, logout, isAuthReady, loading: !isAuthReady }}>
       {children}
     </AuthContext.Provider>
   );

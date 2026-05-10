@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
 import { 
   ChevronRight, 
   CreditCard, 
@@ -23,6 +26,7 @@ interface CartItem {
 export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, userData } = useAuth();
   
   // Use products from location.state if available (passed from Buy Now or Cart)
   const stateItems = location.state?.items;
@@ -45,6 +49,23 @@ export default function Checkout() {
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
 
+  const [email, setEmail] = useState(userData?.email || user?.email || '');
+  const [firstName, setFirstName] = useState(userData?.firstName || '');
+  const [lastName, setLastName] = useState(userData?.lastName || '');
+  const [address, setAddress] = useState(userData?.location || '');
+  const [saveInfo, setSaveInfo] = useState(true);
+
+  React.useEffect(() => {
+    if (userData) {
+      if (!email && userData.email) setEmail(userData.email);
+      if (!firstName && userData.firstName) setFirstName(userData.firstName);
+      if (!lastName && userData.lastName) setLastName(userData.lastName);
+      if (!address && userData.location) setAddress(userData.location);
+    } else if (user && !email) {
+      setEmail(user.email || '');
+    }
+  }, [userData, user]);
+
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shippingCost = shippingMethod === 'standard' ? 15 : 35;
   const taxes = subtotal * 0.08;
@@ -57,8 +78,22 @@ export default function Checkout() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (saveInfo && user) {
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        await updateDoc(userRef, {
+          firstName,
+          lastName,
+          location: address
+        });
+      } catch (err) {
+        console.error("Error saving user info:", err);
+      }
+    }
+    
     alert('Order placed successfully! (Demo)');
     navigate('/');
   };
@@ -94,6 +129,8 @@ export default function Checkout() {
                       type="email" 
                       required
                       placeholder="Email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
                       className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all"
                     />
                   </div>
@@ -121,9 +158,9 @@ export default function Checkout() {
                     </select>
                     <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
-                  <input type="text" required placeholder="First name" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
-                  <input type="text" required placeholder="Last name" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
-                  <input type="text" required placeholder="Address" className="sm:col-span-2 w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
+                  <input type="text" required placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
+                  <input type="text" required placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)} className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
+                  <input type="text" required placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="sm:col-span-2 w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
                   <input type="text" placeholder="Apartment, suite, etc. (optional)" className="sm:col-span-2 w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
                   <input type="text" required placeholder="City" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#2C2C2C] transition-all" />
                   <div className="relative">
@@ -140,7 +177,7 @@ export default function Checkout() {
                   <div className="sm:col-span-2 pt-2">
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <div className="relative flex items-center justify-center">
-                        <input type="checkbox" className="peer appearance-none w-5 h-5 border border-gray-200 rounded-md checked:bg-[#2C2C2C] checked:border-[#2C2C2C] transition-all" />
+                        <input type="checkbox" checked={saveInfo} onChange={e => setSaveInfo(e.target.checked)} className="peer appearance-none w-5 h-5 border border-gray-200 rounded-md checked:bg-[#2C2C2C] checked:border-[#2C2C2C] transition-all" />
                         <div className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
                           <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
                         </div>

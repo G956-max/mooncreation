@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Package, Heart, Settings, LogOut, ChevronRight, MapPin, Phone, Mail, Edit3, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { updateProfile } from 'firebase/auth';
 
 type TabType = 'profile' | 'orders' | 'wishlist' | 'settings';
 
@@ -121,7 +124,7 @@ export default function Profile() {
 }
 
 function ProfileTab() {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
   return (
     <div className="bg-white rounded-2xl shadow-sm p-8">
       <div className="flex justify-between items-start mb-8">
@@ -141,7 +144,11 @@ function ProfileTab() {
             <User className="w-4 h-4 mr-2" />
             <span className="text-sm font-medium">Full Name</span>
           </div>
-          <p className="text-gray-900 font-medium">{user?.displayName || 'Not provided'}</p>
+          <p className="text-gray-900 font-medium">
+            {userData?.firstName || userData?.lastName 
+              ? `${userData?.firstName || ''} ${userData?.lastName || ''}`.trim() 
+              : user?.displayName || 'Not provided'}
+          </p>
         </div>
         <div className="p-4 rounded-xl border border-gray-100 bg-gray-50/50">
           <div className="flex items-center text-gray-500 mb-1">
@@ -155,14 +162,14 @@ function ProfileTab() {
             <Phone className="w-4 h-4 mr-2" />
             <span className="text-sm font-medium">Phone Number</span>
           </div>
-          <p className="text-gray-900 font-medium">+1 (555) 000-0000</p>
+          <p className="text-gray-900 font-medium">{userData?.phone || 'Not provided'}</p>
         </div>
         <div className="p-4 rounded-xl border border-gray-100 bg-gray-50/50">
           <div className="flex items-center text-gray-500 mb-1">
             <MapPin className="w-4 h-4 mr-2" />
             <span className="text-sm font-medium">Location</span>
           </div>
-          <p className="text-gray-900 font-medium">New York, USA</p>
+          <p className="text-gray-900 font-medium">{userData?.location || 'Not provided'}</p>
         </div>
       </div>
     </div>
@@ -318,7 +325,39 @@ function WishlistTab() {
 }
 
 function SettingsTab() {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
+  
+  const [firstName, setFirstName] = useState(userData?.firstName || user?.displayName?.split(' ')[0] || '');
+  const [lastName, setLastName] = useState(userData?.lastName || user?.displayName?.split(' ')[1] || '');
+  const [phone, setPhone] = useState(userData?.phone || '');
+  const [location, setLocation] = useState(userData?.location || '');
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setIsSaving(true);
+    try {
+      await updateProfile(user, {
+        displayName: `${firstName} ${lastName}`.trim()
+      });
+
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        firstName,
+        lastName,
+        phone,
+        location
+      });
+      
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again later.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-8">Account Settings</h2>
@@ -333,7 +372,8 @@ function SettingsTab() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                 <input 
                   type="text" 
-                  defaultValue={user?.displayName?.split(' ')[0] || ''}
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
                 />
               </div>
@@ -341,7 +381,8 @@ function SettingsTab() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                 <input 
                   type="text" 
-                  defaultValue={user?.displayName?.split(' ')[1] || ''}
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
                 />
               </div>
@@ -362,14 +403,31 @@ function SettingsTab() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
               <input 
                 type="tel" 
-                defaultValue="+1 (555) 000-0000"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Address / Location</label>
+              <input 
+                type="text" 
+                value={location}
+                onChange={e => setLocation(e.target.value)}
+                placeholder="Enter your shipping address"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
               />
             </div>
 
             <div className="pt-2">
-              <button type="button" className="bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                Save Changes
+              <button 
+                type="button" 
+                onClick={handleSaveProfile}
+                disabled={isSaving}
+                className={`bg-gray-900 text-white px-6 py-2.5 rounded-lg font-medium transition-colors ${isSaving ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-800'}`}
+              >
+                {isSaving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </form>
