@@ -14,18 +14,18 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="bg-white py-10 md:py-20 border-t border-gray-100">
+    <section className="bg-white py-16 md:py-24 border-t border-gray-100">
       <div className="w-full mx-auto px-4 sm:px-8 lg:px-12">
-        <h2 className="text-xl md:text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-8 md:mb-16">{t('whyChooseUs')}</h2>
+        <h2 className="text-xl md:text-3xl font-serif font-bold text-[#2C2C2C] text-center mb-12 md:mb-20">{t('whyChooseUs')}</h2>
         
-        <div className="flex flex-wrap justify-between gap-y-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-16">
           {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center text-center w-1/2 md:w-1/3 lg:w-1/6 px-4">
+            <div key={index} className="flex flex-col items-center text-center">
               <div className="p-5 bg-[#FAF9F6] rounded-full text-[#C48B22] mb-6 hover:bg-[#C48B22] hover:text-white transition-all duration-300 shadow-sm">
                 {stat.icon}
               </div>
-              <div className="font-bold text-xl text-[#2C2C2C] mb-1">{stat.value}</div>
-              <div className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-bold leading-tight">
+              <div className="font-bold text-xl md:text-2xl text-[#2C2C2C] mb-3">{stat.value}</div>
+              <div className="text-[11px] md:text-xs text-gray-500 uppercase tracking-[0.15em] font-semibold leading-relaxed max-w-[150px]">
                 {stat.label}
               </div>
             </div>
